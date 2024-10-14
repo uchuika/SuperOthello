@@ -106,12 +106,13 @@ bool Grid::CheckCanPlace(size_t row, size_t col, bool turnOver)
 		turnTile = Tile::EWhite;
 	}
 
-	if (tstate == Tile::EBlack || tstate == Tile::EWhite)
+	if ((tstate == Tile::EBlack || tstate == Tile::EWhite) && !turnOver)
 	{
 		//置けないを返す
+		printf("すでに置かれているので置けない");
 		return false;
 	}
-	Vector2 currentPosition = Vector2(row, col);
+	Vector2 currentPosition = Vector2(col, row);
 	printf("%d\n", turnState);
 	printf("敵の石:%d\n", opponentTile);
 	printf("X: %f, Y: %f\n", currentPosition.y, currentPosition.x);
@@ -120,7 +121,7 @@ bool Grid::CheckCanPlace(size_t row, size_t col, bool turnOver)
 	for (int i = 0; i < DIRECTION_MAX; i++) 
 	{
 		//現在チェック中の座標を宣言
-		Vector2 currentPosition = Vector2(row, col);
+		Vector2 currentPosition = Vector2(col, row);
 
 		//隣のマスに移動
 		currentPosition = currentPosition + DirectionsState[i];
@@ -182,7 +183,7 @@ bool Grid::CheckCanPlace(size_t row, size_t col, bool turnOver)
 				{
 					printf("turnOver\n");
 					//ひっくり返す座標を宣言
-					Vector2 reversePosition = Vector2(row, col);
+					Vector2 reversePosition = Vector2(col, row);
 
 					//隣のマスに移動する
 					reversePosition = reversePosition + DirectionsState[i];
@@ -220,7 +221,6 @@ bool Grid::CheckCanPlace(size_t row, size_t col, bool turnOver)
 					} while (mTiles[reversePosition.y][reversePosition.x]->GetTileState() != turnTile);
 				}
 			}
-			
 		}
 	}
 
@@ -239,11 +239,13 @@ void Grid::PlaceOthello()
 		if (turnState == TURN_BLACK)
 		{
 			mSelectedTile->SetTileState(Tile::EBlack);
+			CheckCanPlace(selRow, selCol, true);
 			turnState = TURN_WHITE;
 		}
 		else
 		{
 			mSelectedTile->SetTileState(Tile::EWhite);
+			CheckCanPlace(selRow, selCol, true);
 			turnState = TURN_BLACK;
 		}
 	}
@@ -256,8 +258,9 @@ void Grid::UpdateActor(float deltaTime)
 
 	//石をひっくり返す処理
 	//石をひっくり返すフラグを設定してCheckCanPlaceを呼び出し
+	/*
 	if (mTiles[selRow][selCol]->GetTileState() == Tile::EBlack || mTiles[selRow][selCol]->GetTileState() == Tile::EWhite) {
-		printf("ひっくり返し\n");
+		//printf("ひっくり返し\n");
 		CheckCanPlace(selRow, selCol, true);
-	}
+	}*/
 }
