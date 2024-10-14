@@ -54,8 +54,14 @@ public:
 	//石の設置
 	void PlaceOthello();
 
+	//ターンの切り替え
+	void toggleTurn();
+
 	//石が置けるかどうかを判定する関数
 	bool CheckCanPlace(size_t row, size_t col, bool turnOver = false);
+
+	//盤面上に石が置けるかどうかを判定する関数
+	bool CheckCanPlaceAll(TurnState turn);
 
 	// 開始/終了 のタイルの場所
 	//class Tile* GetStartTile();

@@ -109,7 +109,7 @@ bool Grid::CheckCanPlace(size_t row, size_t col, bool turnOver)
 	if ((tstate == Tile::EBlack || tstate == Tile::EWhite) && !turnOver)
 	{
 		//置けないを返す
-		printf("すでに置かれているので置けない");
+		printf("すでに置かれているので置けない\n");
 		return false;
 	}
 	Vector2 currentPosition = Vector2(col, row);
@@ -228,29 +228,84 @@ bool Grid::CheckCanPlace(size_t row, size_t col, bool turnOver)
 	return canPlace;
 }
 
+//盤面上に石を置けるマスがあるかどうかを判定する関数
+bool Grid::CheckCanPlaceAll(TurnState turn)
+{
+	//盤面の全ての行を反復する
+	for (int y = 0; y < NumRows; y++)
+	{
+		//盤面の全ての列を反復する
+		for (int x = 0; x < NumCols; x++)
+		{
+			//判定する座標を宣言する
+			Vector2 position = Vector2{ (float)x, (float)y };
+
+			//対象の座標に石を置けるかどうか判定する
+			if (CheckCanPlace(position.y, position.x))
+			{
+				//石を置けるマスがあるという結果を返す
+				return true;
+			}
+		}
+	}
+
+	//石を置けるマスがないという結果を返す
+	printf("石を置けるマスがないのでスキップします\n");
+	return false;
+}
+
 //石を置く処理
 void Grid::PlaceOthello()
 {
+	Tile::TileState turnTile;
+	if (turnState == TURN_BLACK)
+	{
+		turnTile = Tile::EBlack;
+	}
+	else
+	{
+		turnTile = Tile::EWhite;
+	}
 
-	
-	//
+	//石を置けるマスがあるか判定
+	if (!CheckCanPlaceAll(turnState))
+	{
+		toggleTurn();
+		return;
+	}
+
 	if (mSelectedTile->GetTileState() != Tile::EWhite && mSelectedTile->GetTileState() != Tile::EBlack) {
 		//ターンによって置く石の配置
 		if (turnState == TURN_BLACK)
 		{
 			mSelectedTile->SetTileState(Tile::EBlack);
 			CheckCanPlace(selRow, selCol, true);
-			turnState = TURN_WHITE;
+			toggleTurn();
 		}
 		else
 		{
 			mSelectedTile->SetTileState(Tile::EWhite);
 			CheckCanPlace(selRow, selCol, true);
-			turnState = TURN_BLACK;
+			toggleTurn();
 		}
 	}
 }
 
+//ターンを切り返す関数
+void Grid::toggleTurn()
+{
+	if (turnState == TURN_BLACK)
+	{
+		turnState = TURN_WHITE;
+		printf("白のターンです\n");
+	}
+	else
+	{
+		turnState = TURN_BLACK;
+		printf("黒のターンです\n");
+	}
+
+}
 
 void Grid::UpdateActor(float deltaTime)
 {
