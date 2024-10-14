@@ -1,11 +1,3 @@
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
-
 #include "Grid.h"
 #include "Tile.h"
 //#include "Tower.h"
@@ -16,6 +8,8 @@
 Grid::Grid(class Game* game)
 	:Actor(game)
 	, mSelectedTile(nullptr)
+	, selRow(0)
+	, selCol(0)
 {
 	// 7 rows, 16 columns
 	mTiles.resize(NumRows);
@@ -51,6 +45,21 @@ void Grid::SelectTile(size_t row, size_t col)
 {
 	// 有効な選択であることを確認する
 	//Tile::TileState tstate = mTiles[row][col]->GetTileState();
+	
+	//決着がついていないかどうか判定する
+	if (turnState == TURN_NONE)
+	{
+		printf("決着がつきました\n");
+
+		//黒い石の数を宣言する
+		int blackCount = GetDiskCount(TURN_BLACK);
+
+		//白い石の数を宣言する
+		int whiteCount = GetDiskCount(TURN_WHITE);
+
+		printf("白い石の数: %d\n", whiteCount);
+		printf("黒い石の数: %d\n", blackCount);
+	}
 
 	if (CheckCanPlace(row, col)) {
 		// 前の選択を解除する
@@ -89,10 +98,6 @@ bool Grid::CheckCanPlace(size_t row, size_t col, bool turnOver)
 	//置けるかどうかのフラグを宣言
 	bool canPlace = false;
 
-
-	//対象の座標にすでに石が置かれていないかを判定する
-	Tile::TileState tstate = mTiles[row][col]->GetTileState();
-
 	//相手の石のタイル
 	Tile::TileState opponentTile;
 	Tile::TileState turnTile;
@@ -105,6 +110,9 @@ bool Grid::CheckCanPlace(size_t row, size_t col, bool turnOver)
 		opponentTile = Tile::EBlack;
 		turnTile = Tile::EWhite;
 	}
+
+	//対象の座標にすでに石が置かれていないかを判定する
+	Tile::TileState tstate = mTiles[row][col]->GetTileState();
 
 	if ((tstate == Tile::EBlack || tstate == Tile::EWhite) && !turnOver)
 	{
@@ -254,6 +262,41 @@ bool Grid::CheckCanPlaceAll(TurnState turn)
 	return false;
 }
 
+int Grid::GetDiskCount(TurnState turn)
+{
+	//与えられたターンのTileState
+	//相手の石のタイル
+	Tile::TileState turnTile;
+	if (turnState == TURN_BLACK)
+	{
+		turnTile = Tile::EBlack;
+	}
+	else
+	{
+		turnTile = Tile::EWhite;
+	}
+
+	//数える石の数を保持する変数を宣言する
+	int count = 0;
+	
+	//盤面の全ての行を反復する
+	for (int y = 0; y < NumRows; y++)
+	{
+		for (int x = 0; x < NumCols; x++)
+		{
+			//対象のマスに、対象の石があるのかどうかを判定する
+			if (mTiles[y][x]->GetTileState() == turnTile)
+			{
+				//石の数を加算する
+				count++;
+			}
+		}
+	}
+	
+	//数えた石の数を返す
+	return count;
+}
+
 //石を置く処理
 void Grid::PlaceOthello()
 {
@@ -270,8 +313,21 @@ void Grid::PlaceOthello()
 	//石を置けるマスがあるか判定
 	if (!CheckCanPlaceAll(turnState))
 	{
+		//ターンを切り替える
 		toggleTurn();
-		return;
+
+		//置けるマスがないかどうかを判定する
+		if (!CheckCanPlaceAll(turnState))
+		{
+			//決着がついたことにする
+			turnState = TURN_NONE;
+		}
+		//相手に置けるマスがあれば
+		else
+		{
+			//相手のターンへスキップ
+			return;
+		}
 	}
 
 	if (mSelectedTile->GetTileState() != Tile::EWhite && mSelectedTile->GetTileState() != Tile::EBlack) {

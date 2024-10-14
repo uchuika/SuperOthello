@@ -1,11 +1,3 @@
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
-
 #pragma once
 #include "Actor.h"
 #include <vector>
@@ -20,7 +12,8 @@ public:
 	enum TurnState
 	{
 		TURN_BLACK,
-		TURN_WHITE
+		TURN_WHITE,
+		TURN_NONE
 	};
 
 	//方向の種類を定義
@@ -37,6 +30,7 @@ public:
 		DIRECTION_MAX		//方向の数
 	};
 
+	//DirStateとリンクしたベクトルの方向を保存
 	Vector2 DirectionsState[DIRECTION_MAX]
 	{
 		Vector2 { 0,-1},		//上
@@ -62,6 +56,9 @@ public:
 
 	//盤面上に石が置けるかどうかを判定する関数
 	bool CheckCanPlaceAll(TurnState turn);
+
+	//任意の石の数を数える関数
+	int GetDiskCount(TurnState turn);
 
 	// 開始/終了 のタイルの場所
 	//class Tile* GetStartTile();
