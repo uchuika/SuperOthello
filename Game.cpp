@@ -5,6 +5,7 @@
 #include "Actor.h"
 #include "Grid.h"
 #include "SpriteComponent.h"
+#include "TextComponent.h"
 
 Game::Game()
 	:mWindow(nullptr)
@@ -157,22 +158,19 @@ void Game::GenerateOutput()
 		sprite->Draw(mRenderer);
 	}
 
+	for (auto text : mTexts)
+	{
+		text->Draw(mRenderer);
+	}
+
 	SDL_RenderPresent(mRenderer);
+
+
 }
 
 void Game::LoadData()
 {
 	mGrid = new Grid(this);
-
-	// For testing AIComponent
-	//Actor* a = new Actor(this);
-	//AIComponent* aic = new AIComponent(a);
-	//// Register states with AIComponent
-	//aic->RegisterState(new AIPatrol(aic));
-	//aic->RegisterState(new AIDeath(aic));
-	//aic->RegisterState(new AIAttack(aic));
-	//// Start in patrol state
-	//aic->ChangeState("Patrol");
 }
 
 void Game::UnloadData()
@@ -268,6 +266,30 @@ void Game::RemoveActor(Actor* actor)
 	}
 }
 
+void Game::AddText(TextComponent* text)
+{
+	int myDrawOrder = text->GetDrawOrder();
+	auto iter = mTexts.begin();
+	for (;
+		iter != mTexts.begin();
+		++iter)
+	{
+		if (myDrawOrder < (*iter)->GetDrawOrder())
+		{
+			break;
+		}
+	}
+
+	//イテレータの位置より前に要素を挿入する。
+	mTexts.insert(iter, text);
+}
+
+void Game::RemoveText(TextComponent* text)
+{
+	auto iter = std::find(mTexts.begin(), mTexts.end(), text);
+	mTexts.erase(iter);
+}
+
 void Game::AddSprite(SpriteComponent* sprite)
 {
 	// Find the insertion point in the sorted vector
@@ -284,7 +306,7 @@ void Game::AddSprite(SpriteComponent* sprite)
 		}
 	}
 
-	// Inserts element before position of iterator
+	// イテレータの位置より前に要素を挿入する。
 	mSprites.insert(iter, sprite);
 }
 
