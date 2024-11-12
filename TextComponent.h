@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "SDL.h"
 #include "Math.h"
+#include "string"
 
 class TextComponent : public Component
 {
@@ -17,8 +18,9 @@ public:
 	int GetTexHeight() const { return mTexHeight; }
 	int GetTexWidth() const { return mTexWidth; }
 
-	void SetVisible(bool visible) { mVisible = visible; }
+	void SetVisible(bool& visible) { mVisible = visible; }
 	void SetText(const std::string& text);
+	void SetPosition(const Vector2& postion);
 	bool GetVisible() const { return mVisible; }
 private:
 

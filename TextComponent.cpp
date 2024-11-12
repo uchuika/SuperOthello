@@ -22,7 +22,7 @@ TextComponent::~TextComponent()
 
 void TextComponent::Draw(SDL_Renderer* renderer)
 {
-	DrawTexture(renderer, mTextTex, )
+	DrawTexture(renderer, mTextTex, mPositions);
 }
 
 void TextComponent::SetText(const std::string& text)
@@ -38,8 +38,7 @@ void TextComponent::SetText(const std::string& text)
 }
 
 void TextComponent::DrawTexture(class SDL_Renderer* renderer, class SDL_Texture* texture,
-	const Vector2& offset = Vector2::Zero,
-	float scale = 1.0f) 
+	const Vector2& offset,float scale) 
 {
 	if (mTextTex)
 	{
@@ -65,10 +64,17 @@ void TextComponent::DrawTexture(class SDL_Renderer* renderer, class SDL_Texture*
 	}
 }
 
+void TextComponent::SetPosition(const Vector2& position)
+{
+	mPositions = position;
+}
+
 void TextComponent::SetTexture(SDL_Texture* texture)
 {
 	mTextTex = texture;
 	// Set width/height
 	SDL_QueryTexture(texture, nullptr, nullptr, &mTexWidth, &mTexHeight);
 }
+
+
 
