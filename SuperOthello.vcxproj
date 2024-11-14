@@ -148,6 +148,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OthelloBlack.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
@@ -160,6 +161,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="OthelloBlack.h" />
     <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>

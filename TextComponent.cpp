@@ -11,6 +11,8 @@ TextComponent::TextComponent(Actor* owner, int drawOrder)
 	, mTexHeight(0)
 	, mVisible(true)
 	, mTextTex(nullptr)
+	, mFont(nullptr)
+	, mPositions(Vector2(0,0))
 {
 	mOwner->GetGame()->AddText(this);
 }
@@ -49,8 +51,8 @@ void TextComponent::DrawTexture(class SDL_Renderer* renderer, class SDL_Texture*
 			r.w = static_cast<int>(mTexWidth * mOwner->GetScale());
 			r.h = static_cast<int>(mTexHeight * mOwner->GetScale());
 			// Center the rectangle around the position of the owner
-			r.x = static_cast<int>(mOwner->GetPosition().x - r.w / 2);
-			r.y = static_cast<int>(mOwner->GetPosition().y - r.h / 2);
+			r.x = static_cast<int>(mPositions.x - r.w / 2);
+			r.y = static_cast<int>(mPositions.y - r.h / 2);
 
 			// Draw (have to convert angle from radians to degrees, and clockwise to counter)
 			SDL_RenderCopyEx(renderer,

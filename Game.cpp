@@ -6,6 +6,7 @@
 #include "Grid.h"
 #include "SpriteComponent.h"
 #include "TextComponent.h"
+#include "Font.h"
 
 Game::Game()
 	:mWindow(nullptr)
@@ -221,6 +222,30 @@ SDL_Texture* Game::GetTexture(const std::string& fileName)
 		mTextures.emplace(fileName.c_str(), tex);
 	}
 	return tex;
+}
+
+Font* Game::GetFont(const std::string& fileName)
+{
+	auto iter = mFonts.find(fileName);
+	if (iter != mFonts.end())
+	{
+		return iter->second;
+	}
+	else
+	{
+		Font* font = new Font(this, mRenderer);
+		if (font->Load(fileName))
+		{
+			mFonts.emplace(fileName, font);
+		}
+		else
+		{
+			font->Unload();
+			delete font;
+			font = nullptr;
+		}
+		return font;
+	}
 }
 
 void Game::Shutdown()
