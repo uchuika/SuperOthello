@@ -18,8 +18,8 @@ public:
 	int GetTexHeight() const { return mTexHeight; }
 	int GetTexWidth() const { return mTexWidth; }
 
-	void SetVisible(bool& visible) { mVisible = visible; }
 	void SetText(const std::string& text);
+	void SetVisible(bool& visible) { mVisible = visible; }
 	void SetPosition(const Vector2& postion);
 	bool GetVisible() const { return mVisible; }
 private:
@@ -30,9 +30,9 @@ protected:
 		const Vector2& offset = Vector2::Zero,
 		float scale = 1.0f);
 
-	class Game* mGame;
-	class Font* mFont;
 	SDL_Texture* mTextTex;
+
+	class Font* mFont;
 
 	std::string mText;
 

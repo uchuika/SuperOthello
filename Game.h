@@ -24,6 +24,8 @@ public:
 
 	SDL_Texture* GetTexture(const std::string& fileName);
 
+	class Font* GetFont(const std::string & fileName);
+
 	class Grid* GetGrid() { return mGrid; }
 	std::vector<class Enemy*>& GetEnemies() { return mEnemies; }
 	class Enemy* GetNearestEnemy(const Vector2& pos);
@@ -36,6 +38,8 @@ private:
 
 	// 読み込まれたテクスチャのマップ
 	std::unordered_map<std::string, SDL_Texture*> mTextures;
+
+	std::unordered_map<std::string, class Font*> mFonts;
 
 	// 全てのアクターを保管する配列
 	std::vector<class Actor*> mActors;

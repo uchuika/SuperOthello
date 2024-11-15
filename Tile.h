@@ -1,7 +1,6 @@
 #pragma once
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
-#pragma once
 #include "Actor.h"
 #include <vector>
 
