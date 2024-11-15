@@ -104,16 +104,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\SDL2-2.30.2\include;C:\SDL2-2.30.2\SDL2_image-2.8.2\include;C:\SDL2-2.30.2\SDL2_ttf-2.22.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\SDL2-2.30.9\include;C:\SDL2-2.30.9\SDL2_image-2.8.2\include;C:\SDL2-2.30.9\SDL2_ttf-2.22.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\SDL2-2.30.2\lib\x64;C:\SDL2-2.30.2\SDL2_image-2.8.2\lib\x64;C:\SDL2-2.30.2\SDL2_ttf-2.22.0\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\SDL2-2.30.9\lib\x64;C:\SDL2-2.30.9\SDL2_image-2.8.2\lib\x64;C:\SDL2-2.30.9\SDL2_ttf-2.22.0\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>call "C:\Users\crist\source\repos\Chap2Actor\SDL_dll_copy.bat" "$(OutDir)" /i /s /y</Command>
+      <Command>call "D:\C++\SuperOthello\SDL_dll_copy.bat" "$(OutDir)" /i /s /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
