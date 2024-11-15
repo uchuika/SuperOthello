@@ -4,13 +4,17 @@
 #include "Game.h"
 #include "Text.h"
 
-Text::Text(class Game* game)
+
+Text::Text(class Game* game, const std::string& text)
 	:Actor(game)
-	,mText(nullptr)
+	,mTextc(nullptr)
 	,mFont(nullptr)
 {
-	mText = new TextComponent(this);
+	mGame = game;
+	mTextc = new TextComponent(this);
 	mFont = mGame->GetFont("Assets/k8x12.ttf");
+
+	mTextc->SetText(text);
 }
 
 

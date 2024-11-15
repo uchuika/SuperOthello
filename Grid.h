@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include <vector>
 #include "Math.h"
+#include "string"
 
 class Grid : public Actor
 {
@@ -69,6 +70,9 @@ private:
 	// 特定のタイルを選択
 	void SelectTile(size_t row, size_t col);
 
+	//描画するTextを配列についか
+	void AddRenderText(const std::string& text);
+
 	// パス上のタイルのテクスチャを更新する
 	//void UpdatePathTiles(class Tile* start);
 
@@ -81,6 +85,9 @@ private:
 
 	// グリッド内のタイルの2Dベクトル
 	std::vector<std::vector<class Tile*>> mTiles;
+
+	//ゲーム画面内での文字列
+	std::vector<class Text*> mTexts;
 
 	// 次の敵までの時間
 	//float mNextEnemy;

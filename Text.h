@@ -7,10 +7,10 @@ class Text : public Actor
 {
 public:
 
-	Text(class Game* game);
+	Text(class Game* game, const std::string& text);
 
 private:
 	class Game* mGame;
 	class Font* mFont;
-	class TextComponent* mText;
+	class TextComponent* mTextc;
 };

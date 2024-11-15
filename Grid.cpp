@@ -4,6 +4,8 @@
 //#include "Enemy.h"
 #include <algorithm>
 #include "Math.h"
+#include "Text.h"
+#include "string"
 
 Grid::Grid(class Game* game)
 	:Actor(game)
@@ -27,6 +29,9 @@ Grid::Grid(class Game* game)
 			mTiles[i][j]->SetPosition(Vector2(TileSize / 2.0f + j * TileSize, StartY + i * TileSize));
 		}
 	}
+
+	//Text class の保存用配列
+	mTexts.resize(0);
 
 	//最初のターンを黒で初期化
 	turnState = TURN_BLACK;
@@ -354,6 +359,10 @@ void Grid::toggleTurn()
 	{
 		turnState = TURN_WHITE;
 		printf("白のターンです\n");
+
+		//char* c_str[] = {  };
+		//const std::string* s_str = c_str;
+		AddRenderText("白のターンです");
 	}
 	else
 	{
@@ -361,6 +370,16 @@ void Grid::toggleTurn()
 		printf("黒のターンです\n");
 	}
 
+}
+
+//描画するテキストを配列についか
+void Grid::AddRenderText(const std::string& text)
+{
+	Text* textClass = new Text(GetGame(), text);
+
+	textClass->SetPosition(Vector2 {15, 15});
+
+	mTexts.push_back(textClass);
 }
 
 void Grid::UpdateActor(float deltaTime)
