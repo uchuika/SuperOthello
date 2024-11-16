@@ -73,6 +73,15 @@ SDL_Texture* Font::RenderText(
 
 	//指定サイズのフォントデータを探す
 	auto iter = mFontData.find(pointSize);
+
+	/*
+	for (auto mfont : mFontData) {
+		if (mfontnullptr) {
+
+		}
+	}
+	*/
+
 	if (iter != mFontData.end())
 	{
 		TTF_Font* font = iter->second;
