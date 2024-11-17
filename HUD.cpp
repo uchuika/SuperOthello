@@ -6,7 +6,7 @@ HUD::HUD(Game* game)
 	:UIScreen(game)
 	,mGame(game)
 {
-	mFont = mGame->GetFont("Assets/Carlito-Regular.ttf");
+	mFont = mGame->GetFont("Assets/k8x12.ttf");
 }
 HUD::~HUD()
 {

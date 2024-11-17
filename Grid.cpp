@@ -355,13 +355,13 @@ void Grid::toggleTurn()
 	{
 		turnState = TURN_WHITE;
 		printf("白のターンです\n");
-		mGame->GetHUD()->SetStatusText("WhiteTurnです");
+		mGame->GetHUD()->SetStatusText(u8"白のターンです");
 	}
 	else
 	{
 		turnState = TURN_BLACK;
 		printf("黒のターンです\n");
-		mGame->GetHUD()->SetStatusText("BrackTurnです");
+		mGame->GetHUD()->SetStatusText(u8"黒のターンです");
 	}
 
 }
