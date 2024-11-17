@@ -77,9 +77,10 @@ SDL_Texture* Font::RenderText(const std::string& textKey,
 	if (iter != mFontData.end())
 	{
 		TTF_Font* font = iter->second;
-		const std::string& actualText = mGame->GetText(textKey);
+		//const std::string& actualText = mGame->GetText(textKey);
+		const std::string& actualText = textKey;
 		// Draw this to a surface (blended for alpha)
-		SDL_Surface* surf = TTF_RenderText_Blended(font, actualText.c_str(), sdlColor);
+		SDL_Surface* surf = TTF_RenderUTF8_Blended(font, actualText.c_str(), sdlColor);
 		if (surf != nullptr)
 		{
 			// Convert from surface to texture

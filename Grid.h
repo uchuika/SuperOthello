@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include <vector>
 #include "Math.h"
+#include "Game.h"
 
 class Grid : public Actor
 {
@@ -82,6 +83,8 @@ private:
 	// グリッド内のタイルの2Dベクトル
 	std::vector<std::vector<class Tile*>> mTiles;
 
+	class Game* mGame;
+
 	// 次の敵までの時間
 	//float mNextEnemy;
 
@@ -97,4 +100,5 @@ private:
 	const float TileSize = 64.0f;
 	// 次のオセロを配置できるまでの時間
 	//const float EnemyTime = 1.5f;
+
 };

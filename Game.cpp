@@ -44,6 +44,13 @@ bool Game::Initialize()
 		return false;
 	}
 
+	// SDL_ttfの初期化
+	if (TTF_Init() != 0)
+	{
+		SDL_Log("Failed to initialize SDL_ttf");
+		return false;
+	}
+
 	//スクリーンのサイズを変数に格納
 	Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
 	bool IsFullscreen = SDL_GetWindowFlags(mWindow) & FullscreenFlag;
@@ -218,6 +225,9 @@ void Game::GenerateOutput()
 void Game::LoadData()
 {
 	mGrid = new Grid(this);
+
+	//UI
+	mHUD = new HUD(this);
 
 	// For testing AIComponent
 	//Actor* a = new Actor(this);

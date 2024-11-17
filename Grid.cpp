@@ -7,6 +7,7 @@
 
 Grid::Grid(class Game* game)
 	:Actor(game)
+	,mGame(game)
 	, mSelectedTile(nullptr)
 	, selRow(0)
 	, selCol(0)
@@ -354,11 +355,13 @@ void Grid::toggleTurn()
 	{
 		turnState = TURN_WHITE;
 		printf("白のターンです\n");
+		mGame->GetHUD()->SetStatusText("WhiteTurnです");
 	}
 	else
 	{
 		turnState = TURN_BLACK;
 		printf("黒のターンです\n");
+		mGame->GetHUD()->SetStatusText("BrackTurnです");
 	}
 
 }

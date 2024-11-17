@@ -6,6 +6,29 @@
 #include <vector>
 #include "SDL.h"
 
+class Text
+{
+public:
+	Text(const std::string& name, class Font* font,
+		const Vector2& pos, const Vector2& dims);
+	~Text();
+
+	//ゲッターとセッター
+	class SDL_Texture* GetTextTex() { return mTextTex; }
+	const Vector2& GetPosition() const { return mPosition; }
+
+	//表示するテキストを設定する関数
+	void SetRenderText(const std::string& text);
+
+private:
+	std::string mText;
+	class SDL_Texture* mTextTex;
+	class Font* mFont;
+	Vector2 mPosition;
+	Vector2 mDimensions;
+
+};
+
 class Button
 {
 public:
@@ -28,6 +51,7 @@ public:
 	// ボタンがクリックされたときに呼び出し
 	void OnClick();
 private:
+	//ボタンがクリックされた時に実行される関数のポインタ
 	std::function<void()> mOnClick;
 	std::string mName;
 	class SDL_Texture* mNameTex;
@@ -63,7 +87,11 @@ public:
 		const Vector3& color = Color::White,
 		int pointSize = 40);
 	// ボタンをスクリーンについか
-	void AddButton(const std::string& name, std::function<void()> onClick);
+	void AddButton(const std::string& name, std::function<void()>onClick);
+
+	//テキストをスクリーンについか
+	void AddText(const std::string& name, const Vector2& pos);
+
 protected:
 	//テクスチャを描画するヘルパー関数
 	void DrawTexture(class SDL_Renderer* renderer, class SDL_Texture* texture,
@@ -89,4 +117,7 @@ protected:
 	UIState mState;
 	// ボタンのリスト
 	std::vector<Button*> mButtons;
+
+	//テキストのリスト
+	std::vector<Text*> mTexts;
 };

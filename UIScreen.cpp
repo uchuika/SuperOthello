@@ -1,9 +1,11 @@
+#pragma once
 #include "UIScreen.h"
 #include "SDL.h"
 //#include "Shader.h"
 #include "Game.h"
 //#include "Renderer.h"
 #include "Font.h"
+#include <string>
 
 UIScreen::UIScreen(Game* game)
 	:mGame(game)
@@ -29,11 +31,19 @@ UIScreen::~UIScreen()
 		delete mTitle;
 	}
 
+	//“o˜^‚³‚ê‚Ä‚¢‚éƒ{ƒ^ƒ“‚ðíœ
 	for (auto b : mButtons)
 	{
 		delete b;
 	}
 	mButtons.clear();
+
+	//“o˜^‚³‚ê‚Ä‚¢‚éƒeƒLƒXƒg‚ðíœ
+	for (auto t : mTexts)
+	{
+		delete t;
+	}
+	mTexts.clear();
 }
 
 void UIScreen::Update(float deltaTime)
@@ -62,6 +72,13 @@ void UIScreen::Draw(SDL_Renderer* renderer)
 		// Draw text of button
 		DrawTexture(renderer, b->GetNameTex(), b->GetPosition());
 	}
+
+	//ƒeƒLƒXƒg‚Ì•`‰æ
+	for (auto t : mTexts)
+	{
+		DrawTexture(renderer, t->GetTextTex(), t->GetPosition());
+	}
+
 	// Override in subclasses to draw any textures
 }
 
@@ -152,6 +169,20 @@ void UIScreen::AddButton(const std::string& name, std::function<void()> onClick)
 	mNextButtonPos.y -= buttonOffHeight + 20.0f;
 }
 
+void UIScreen::AddText(const std::string& name, const Vector2& pos)
+{
+	SDL_Texture* tex = mFont->RenderText(name);
+	int texWidth;
+	int texHeight;
+	SDL_QueryTexture(tex, nullptr, nullptr, &texWidth, &texHeight);
+	Vector2 dims(static_cast<float>(texWidth),
+		static_cast<float>(texHeight));
+
+	Text* t = new Text(name, mFont,pos, dims);
+
+	mTexts.emplace_back(t);
+}
+
 void UIScreen::DrawTexture(class SDL_Renderer* renderer, class SDL_Texture* texture,
 	const Vector2& offset, float scale)
 {
@@ -160,8 +191,8 @@ void UIScreen::DrawTexture(class SDL_Renderer* renderer, class SDL_Texture* text
 	int texWidth;
 	int texHeight;
 	SDL_QueryTexture(texture, nullptr, nullptr, &texWidth, &texHeight);
-	r.w = static_cast<int>(texWidth);
-	r.h = static_cast<int>(texHeight);
+	r.w = static_cast<int>(texWidth * scale);
+	r.h = static_cast<int>(texHeight * scale);
 	// Center the rectangle around the position of the owner
 	r.x = static_cast<int>(offset.x);
 	r.y = static_cast<int>(offset.y);
@@ -241,4 +272,35 @@ void Button::OnClick()
 	{
 		mOnClick();
 	}
+}
+
+Text::Text(const std::string& name, class Font* font,
+	const Vector2& pos, const Vector2& dims)
+	:mFont(font)
+	,mPosition(pos)
+	,mDimensions(dims)
+{
+	SetRenderText(name);
+}
+
+Text::~Text()
+{
+	if (mTextTex)
+	{
+		SDL_DestroyTexture(mTextTex);
+		delete mTextTex;
+	}
+}
+
+void Text::SetRenderText(const std::string& text)
+{
+	mText = text;
+
+	if (mTextTex)
+	{
+		SDL_DestroyTexture(mTextTex);
+		delete mTextTex;
+		mTextTex = nullptr;
+	}
+	mTextTex = mFont->RenderText(mText);
 }

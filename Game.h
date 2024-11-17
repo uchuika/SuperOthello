@@ -5,6 +5,7 @@
 #include <vector>
 #include "Math.h"
 #include "Font.h"
+#include "HUD.h"
 
 class Game
 {
@@ -19,6 +20,8 @@ public:
 
 	void AddSprite(class SpriteComponent* sprite);
 	void RemoveSprite(class SpriteComponent* sprite);
+
+	class HUD* GetHUD() { return mHUD; }
 
 	SDL_Texture* GetTexture(const std::string& fileName);
 
@@ -70,6 +73,9 @@ private:
 	//各種動作用メンバ変数
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;
+
+	class HUD* mHUD;
+
 	Uint32 mTicksCount;
 	bool mIsRunning;
 	// 現在アクターを更新しているかどうか
