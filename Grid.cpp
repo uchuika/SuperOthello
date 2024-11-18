@@ -9,6 +9,7 @@
 
 Grid::Grid(class Game* game)
 	:Actor(game)
+	,mGame(game)
 	, mSelectedTile(nullptr)
 	, selRow(0)
 	, selCol(0)
@@ -271,8 +272,9 @@ int Grid::GetDiskCount(TurnState turn)
 {
 	//与えられたターンのTileState
 	//相手の石のタイル
+	
 	Tile::TileState turnTile;
-	if (turnState == TURN_BLACK)
+	if (turn == TURN_BLACK)
 	{
 		turnTile = Tile::EBlack;
 	}
@@ -359,15 +361,20 @@ void Grid::toggleTurn()
 	{
 		turnState = TURN_WHITE;
 		printf("白のターンです\n");
+<<<<<<< HEAD
 
 		//char* c_str[] = {  };
 		//const std::string* s_str = c_str;
 		AddRenderText("白のターンです");
+=======
+		//mGame->GetHUD()->SetStatusText(u8"白のターンです");
+>>>>>>> addTextRenderSystem
 	}
 	else
 	{
 		turnState = TURN_BLACK;
 		printf("黒のターンです\n");
+		//mGame->GetHUD()->SetStatusText(u8"黒のターンです");
 	}
 
 }
@@ -393,4 +400,27 @@ void Grid::UpdateActor(float deltaTime)
 		//printf("ひっくり返し\n");
 		CheckCanPlace(selRow, selCol, true);
 	}*/
+
+	//ステータスメッセージを表示
+	//試合が終わってたら
+	if (turnState == TURN_NONE)
+	{
+		//黒い石の数を宣言する
+		int blackCount = GetDiskCount(TURN_BLACK);
+
+		//白い石の数を宣言する
+		int whiteCount = GetDiskCount(TURN_WHITE);
+
+		std::string st = u8"決着がつきました。白:";
+		st += whiteCount + u8" 黒 : " + blackCount;
+		mGame->GetHUD()->SetStatusText(st);
+	}
+	else if (turnState == TURN_BLACK)
+	{
+		mGame->GetHUD()->SetStatusText(u8"黒のターンです");
+	}
+	else
+	{
+		mGame->GetHUD()->SetStatusText(u8"白のターンです");
+	}
 }

@@ -1,3 +1,7 @@
 SuperOthello/
 x64/
+<<<<<<< HEAD
 SDL2-2.30.2/
+=======
+External/
+>>>>>>> addTextRenderSystem

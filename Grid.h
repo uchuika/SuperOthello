@@ -2,7 +2,11 @@
 #include "Actor.h"
 #include <vector>
 #include "Math.h"
+<<<<<<< HEAD
 #include "string"
+=======
+#include "Game.h"
+>>>>>>> addTextRenderSystem
 
 class Grid : public Actor
 {
@@ -86,8 +90,12 @@ private:
 	// グリッド内のタイルの2Dベクトル
 	std::vector<std::vector<class Tile*>> mTiles;
 
+<<<<<<< HEAD
 	//ゲーム画面内での文字列
 	std::vector<class Text*> mTexts;
+=======
+	class Game* mGame;
+>>>>>>> addTextRenderSystem
 
 	// 次の敵までの時間
 	//float mNextEnemy;
@@ -104,4 +112,5 @@ private:
 	const float TileSize = 64.0f;
 	// 次のオセロを配置できるまでの時間
 	//const float EnemyTime = 1.5f;
+
 };

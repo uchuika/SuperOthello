@@ -5,8 +5,12 @@
 #include "Actor.h"
 #include "Grid.h"
 #include "SpriteComponent.h"
+<<<<<<< HEAD
 #include "TextComponent.h"
 #include "Font.h"
+=======
+#include "UIScreen.h"
+>>>>>>> addTextRenderSystem
 
 Game::Game()
 	:mWindow(nullptr)
@@ -25,7 +29,7 @@ bool Game::Initialize()
 		return false;
 	}
 
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 4)", 100, 100, 1024, 768, 0);
+	mWindow = SDL_CreateWindow("SuperOthello", 100, 100, 1024, 768, 0);
 	if (!mWindow)
 	{
 		SDL_Log("Failed to create window: %s", SDL_GetError());
@@ -44,6 +48,37 @@ bool Game::Initialize()
 		SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
 		return false;
 	}
+
+	// SDL_ttfの初期化
+	if (TTF_Init() != 0)
+	{
+		SDL_Log("Failed to initialize SDL_ttf");
+		return false;
+	}
+
+	//スクリーンのサイズを変数に格納
+	Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	bool IsFullscreen = SDL_GetWindowFlags(mWindow) & FullscreenFlag;
+	if (IsFullscreen)
+	{
+		SDL_GetRendererOutputSize(mRenderer, &mScreenWidth, &mScreenHeight);
+	}
+	else
+	{
+		SDL_DisplayMode dm;
+
+		if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+		{
+			SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError);
+			return 1;
+		}
+
+		mScreenWidth = dm.w;
+		mScreenHeight = dm.h;
+	}
+
+	//mScreenWidth = screenWidth;
+	//mScreenHeight = screenHeight;
 
 	LoadData();
 
@@ -146,6 +181,30 @@ void Game::UpdateGame()
 	{
 		delete actor;
 	}
+
+	//UIスクリーンを更新
+	for (auto ui : mUIStack)
+	{
+		if (ui->GetState() == UIScreen::EActive)
+		{
+			ui->Update(deltaTime);
+		}
+	}
+
+	//EClosing状態の画面を削除
+	auto iter = mUIStack.begin();
+	while (iter != mUIStack.end())
+	{
+		if ((*iter)->GetState() == UIScreen::EClosing)
+		{
+			delete *iter;
+			iter = mUIStack.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
 }
 
 void Game::GenerateOutput()
@@ -159,9 +218,16 @@ void Game::GenerateOutput()
 		sprite->Draw(mRenderer);
 	}
 
+<<<<<<< HEAD
 	for (auto text : mTexts)
 	{
 		text->Draw(mRenderer);
+=======
+	//UIスタックの描画
+	for (auto ui : mUIStack)
+	{
+		ui->Draw(mRenderer);
+>>>>>>> addTextRenderSystem
 	}
 
 	SDL_RenderPresent(mRenderer);
@@ -172,6 +238,22 @@ void Game::GenerateOutput()
 void Game::LoadData()
 {
 	mGrid = new Grid(this);
+<<<<<<< HEAD
+=======
+
+	//UI
+	mHUD = new HUD(this);
+
+	// For testing AIComponent
+	//Actor* a = new Actor(this);
+	//AIComponent* aic = new AIComponent(a);
+	//// Register states with AIComponent
+	//aic->RegisterState(new AIPatrol(aic));
+	//aic->RegisterState(new AIDeath(aic));
+	//aic->RegisterState(new AIAttack(aic));
+	//// Start in patrol state
+	//aic->ChangeState("Patrol");
+>>>>>>> addTextRenderSystem
 }
 
 void Game::UnloadData()
@@ -340,5 +422,50 @@ void Game::RemoveSprite(SpriteComponent* sprite)
 	// (We can't swap because it ruins ordering)
 	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
 	mSprites.erase(iter);
+}
+
+Font* Game::GetFont(const std::string& fileName)
+{
+	auto iter = mFonts.find(fileName);
+	if (iter != mFonts.end())
+	{
+		return iter->second;
+	}
+	else
+	{
+		Font* font = new Font(this, mRenderer);
+		if (font->Load(fileName))
+		{
+			mFonts.emplace(fileName, font);
+		}
+		else
+		{
+			font->Unload();
+			delete font;
+			font = nullptr;
+		}
+		return font;
+	}
+}
+
+void Game::PushUI(UIScreen* screen)
+{
+	mUIStack.emplace_back(screen);
+}
+
+const std::string& Game::GetText(const std::string& key) 
+{
+	static std::string errorMsg("**KEY NOT FOUND**");
+
+	//Find this text in the map, if it exists
+	auto iter = mText.find(key);
+	if (iter != mText.end())
+	{
+		return iter->second;
+	}
+	else
+	{
+		return errorMsg;
+	}
 }
 
