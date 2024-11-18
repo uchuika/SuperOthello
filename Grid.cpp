@@ -267,8 +267,9 @@ int Grid::GetDiskCount(TurnState turn)
 {
 	//与えられたターンのTileState
 	//相手の石のタイル
+	
 	Tile::TileState turnTile;
-	if (turnState == TURN_BLACK)
+	if (turn == TURN_BLACK)
 	{
 		turnTile = Tile::EBlack;
 	}
