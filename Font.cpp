@@ -1,7 +1,16 @@
+// ----------------------------------------------------------------
+// From Game Programming in C++ by Sanjay Madhav
+// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
+// 
+// Released under the BSD License
+// See LICENSE in root directory for full details.
+// ----------------------------------------------------------------
+
 #include "Font.h"
+#include "SDL.h"
 #include <vector>
 #include "Game.h"
-#include "SDL.h"
+#include "SDL_ttf.h"
 
 Font::Font(class Game* game, class SDL_Renderer* renderer)
 	:mGame(game)
@@ -15,11 +24,9 @@ Font::~Font()
 
 }
 
-//必要なポイントサイズの配列を作成し、
-//それぞれのポイントサイズのTTF_FontをmFontDataに追加する
 bool Font::Load(const std::string& fileName)
 {
-	//サポートするフォントのサイズ
+	// We support these font sizes
 	std::vector<int> fontSizes = {
 		8, 9,
 		10, 11, 12, 14, 16, 18,
@@ -33,13 +40,10 @@ bool Font::Load(const std::string& fileName)
 
 	for (auto& size : fontSizes)
 	{
-		//.ttfファイルをロードし、指定したポイントサイズのTTF_Fontデータのポインタを返す
 		TTF_Font* font = TTF_OpenFont(fileName.c_str(), size);
-
 		if (font == nullptr)
 		{
-			SDL_Log("フォント &s サイズ %d のロードに失敗しました",
-				fileName.c_str(), size);
+			SDL_Log("Failed to load font %s in size %d", fileName.c_str(), size);
 			return false;
 		}
 		mFontData.emplace(size, font);
@@ -47,7 +51,6 @@ bool Font::Load(const std::string& fileName)
 	return true;
 }
 
-//全てのデータを開放する
 void Font::Unload()
 {
 	for (auto& font : mFontData)
@@ -56,54 +59,43 @@ void Font::Unload()
 	}
 }
 
-//文字列を受け取り適切なサイズのフォントを使ってテクスチャを生成する
-SDL_Texture* Font::RenderText(
-	const std::string& text,
-	const Vector3& color,
-	int pointSize)
+SDL_Texture* Font::RenderText(const std::string& textKey,
+	const Vector3& color /*= Color::White*/,
+	int pointSize /*= 24*/)
 {
-	SDL_Texture* tex = nullptr;
+	SDL_Texture* texture = nullptr;
 
-	//色をSDL_Colorに変換する
+	// Convert to SDL_Color
 	SDL_Color sdlColor;
 	sdlColor.r = static_cast<Uint8>(color.x * 255);
 	sdlColor.g = static_cast<Uint8>(color.y * 255);
 	sdlColor.b = static_cast<Uint8>(color.z * 255);
-	sdlColor.b = 255;
+	sdlColor.a = 255;
 
-	//指定サイズのフォントデータを探す
+	// Find the font data for this point size
 	auto iter = mFontData.find(pointSize);
-
-	/*
-	for (auto mfont : mFontData) {
-		if (mfontnullptr) {
-
-		}
-	}
-	*/
-
 	if (iter != mFontData.end())
 	{
 		TTF_Font* font = iter->second;
-		//SDL_Surfaceに描画(アルファブレンディング)
-		SDL_Surface* surf = TTF_RenderText_Blended(font, text.c_str(),
-			sdlColor);
-
+		//const std::string& actualText = mGame->GetText(textKey);
+		const std::string& actualText = textKey;
+		// Draw this to a surface (blended for alpha)
+		SDL_Surface* surf = TTF_RenderUTF8_Blended(font, actualText.c_str(), sdlColor);
 		if (surf != nullptr)
 		{
-			//SDL_Surfaceからテクスチャに変換
-			tex = SDL_CreateTextureFromSurface(mRenderer, surf);
+			// Convert from surface to texture
+			texture = SDL_CreateTextureFromSurface(mRenderer, surf);
 			SDL_FreeSurface(surf);
-			if (!tex)
+			if (!texture)
 			{
-				SDL_Log("サーフェスをテクスチャに変換できませんでした %s", text.c_str());
-				return nullptr;
+				SDL_Log("サーフェスをテクスチャに変換できませんでした %s", actualText.c_str());
 			}
 		}
 	}
-	else 
+	else
 	{
-		SDL_Log("ポイントサイズ %d が未対応です", pointSize);
+		SDL_Log("Point size %d is unsupported", pointSize);
 	}
-	return tex;
+
+	return texture;
 }

@@ -4,11 +4,10 @@
 //#include "Enemy.h"
 #include <algorithm>
 #include "Math.h"
-#include "Text.h"
-#include "string"
 
 Grid::Grid(class Game* game)
 	:Actor(game)
+	,mGame(game)
 	, mSelectedTile(nullptr)
 	, selRow(0)
 	, selCol(0)
@@ -29,9 +28,6 @@ Grid::Grid(class Game* game)
 			mTiles[i][j]->SetPosition(Vector2(TileSize / 2.0f + j * TileSize, StartY + i * TileSize));
 		}
 	}
-
-	//Text class の保存用配列
-	mTexts.resize(0);
 
 	//最初のターンを黒で初期化
 	turnState = TURN_BLACK;
@@ -271,8 +267,9 @@ int Grid::GetDiskCount(TurnState turn)
 {
 	//与えられたターンのTileState
 	//相手の石のタイル
+	
 	Tile::TileState turnTile;
-	if (turnState == TURN_BLACK)
+	if (turn == TURN_BLACK)
 	{
 		turnTile = Tile::EBlack;
 	}
@@ -359,27 +356,15 @@ void Grid::toggleTurn()
 	{
 		turnState = TURN_WHITE;
 		printf("白のターンです\n");
-
-		//char* c_str[] = {  };
-		//const std::string* s_str = c_str;
-		AddRenderText("白のターンです");
+		//mGame->GetHUD()->SetStatusText(u8"白のターンです");
 	}
 	else
 	{
 		turnState = TURN_BLACK;
 		printf("黒のターンです\n");
+		//mGame->GetHUD()->SetStatusText(u8"黒のターンです");
 	}
 
-}
-
-//描画するテキストを配列についか
-void Grid::AddRenderText(const std::string& text)
-{
-	Text* textClass = new Text(GetGame(), text);
-
-	textClass->SetPosition(Vector2 {15, 15});
-
-	mTexts.push_back(textClass);
 }
 
 void Grid::UpdateActor(float deltaTime)
@@ -393,4 +378,27 @@ void Grid::UpdateActor(float deltaTime)
 		//printf("ひっくり返し\n");
 		CheckCanPlace(selRow, selCol, true);
 	}*/
+
+	//ステータスメッセージを表示
+	//試合が終わってたら
+	if (turnState == TURN_NONE)
+	{
+		//黒い石の数を宣言する
+		int blackCount = GetDiskCount(TURN_BLACK);
+
+		//白い石の数を宣言する
+		int whiteCount = GetDiskCount(TURN_WHITE);
+
+		std::string st = u8"決着がつきました。白:";
+		st += whiteCount + u8" 黒 : " + blackCount;
+		mGame->GetHUD()->SetStatusText(st);
+	}
+	else if (turnState == TURN_BLACK)
+	{
+		mGame->GetHUD()->SetStatusText(u8"黒のターンです");
+	}
+	else
+	{
+		mGame->GetHUD()->SetStatusText(u8"白のターンです");
+	}
 }
