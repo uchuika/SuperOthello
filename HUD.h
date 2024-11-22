@@ -15,6 +15,8 @@ public:
 	void Update(float deltaTime) override;
 	void Draw(class SDL_Renderer* renderer) override;
 	void SetStatusText(const std::string& text, const Vector3& color = Color::White);
+	void SetResultText(const int blackCount, const int whiteCount);
+	void SetEndGame(const bool endgameBool);
 
 protected:
 
@@ -25,6 +27,11 @@ protected:
 
 	class Font* mFont;
 	class Game* mGame;
+
+	bool isEndGame;
+
+	int mBlack = 0;
+	int mWhite = 0;
 
 	Vector3 mStatusColor;
 };

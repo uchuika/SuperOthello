@@ -390,9 +390,13 @@ void Grid::UpdateActor(float deltaTime)
 		//”’‚¢Î‚Ì”‚ðéŒ¾‚·‚é
 		int whiteCount = GetDiskCount(TURN_WHITE);
 
+		mGame->GetHUD()->SetResultText(blackCount, whiteCount);
+		mGame->GetHUD()->SetEndGame(true);
+		/*
 		std::string st = u8"Œˆ’…‚ª‚Â‚«‚Ü‚µ‚½B”’:";
 		st += whiteCount + u8" • : " + blackCount;
 		mGame->GetHUD()->SetStatusText(st);
+		*/
 	}
 	else if (turnState == TURN_BLACK)
 	{
