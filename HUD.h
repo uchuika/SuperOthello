@@ -3,6 +3,7 @@
 #include <vector>
 #include "SDL.h"
 #include <string>
+#include <math.h>
 
 class HUD : public UIScreen
 {
@@ -13,7 +14,7 @@ public:
 
 	void Update(float deltaTime) override;
 	void Draw(class SDL_Renderer* renderer) override;
-	void SetStatusText(const std::string& text);
+	void SetStatusText(const std::string& text, const Vector3& color = Color::White);
 
 protected:
 
@@ -24,4 +25,6 @@ protected:
 
 	class Font* mFont;
 	class Game* mGame;
+
+	Vector3 mStatusColor;
 };

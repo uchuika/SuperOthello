@@ -302,6 +302,7 @@ int Grid::GetDiskCount(TurnState turn)
 //石を置く処理
 void Grid::PlaceOthello()
 {
+
 	Tile::TileState turnTile;
 	if (turnState == TURN_BLACK)
 	{
@@ -395,10 +396,10 @@ void Grid::UpdateActor(float deltaTime)
 	}
 	else if (turnState == TURN_BLACK)
 	{
-		mGame->GetHUD()->SetStatusText(u8"黒のターンです");
+		mGame->GetHUD()->SetStatusText(u8"黒のターンです", Color::Black);
 	}
 	else
 	{
-		mGame->GetHUD()->SetStatusText(u8"白のターンです");
+		mGame->GetHUD()->SetStatusText(u8"白のターンです", Color::White);
 	}
 }

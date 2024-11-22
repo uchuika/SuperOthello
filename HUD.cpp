@@ -22,13 +22,14 @@ void HUD::Update(float deltaTime)
 
 void HUD::Draw(SDL_Renderer* renderer)
 {
-	SDL_Texture* t = mFont->RenderText(mStatusText, Color::White , 72);
+	SDL_Texture* t = mFont->RenderText(mStatusText, mStatusColor , 72);
 	DrawTexture(renderer, t, Vector2::Zero, 2.0f);
 }
 
-void HUD::SetStatusText(const std::string& text)
+void HUD::SetStatusText(const std::string& text, const Vector3& color)
 {
 	mStatusText = text;
+	mStatusColor = color;
 	//AddText(mStatusText, Vector2(500, 500));
 }
 

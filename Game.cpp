@@ -113,6 +113,7 @@ void Game::ProcessInput()
 
 	if (keyState[SDL_SCANCODE_B])
 	{
+
 		mGrid->PlaceOthello();
 	}
 
