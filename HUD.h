@@ -30,8 +30,8 @@ protected:
 
 	bool isEndGame;
 
-	int mBlack = 0;
-	int mWhite = 0;
+	std::string mBlack = u8"";
+	std::string mWhite = u8"";
 
 	Vector3 mStatusColor;
 };

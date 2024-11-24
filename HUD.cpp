@@ -5,6 +5,7 @@
 HUD::HUD(Game* game)
 	:UIScreen(game)
 	,mGame(game)
+	,isEndGame(false)
 {
 	mFont = mGame->GetFont("Assets/k8x12.ttf");
 }
@@ -26,19 +27,25 @@ void HUD::Draw(SDL_Renderer* renderer)
 	DrawTexture(renderer, t, Vector2::Zero, 2.0f);
 
 	if (isEndGame) {
+
+		std::string blackSt = u8"çï: ";
+		std::string whiteSt = u8"îí: ";
+
 		SDL_Texture* resultT;
-		std::vector<std::string> resultMessage { u8"çï" + mBlack, u8"îí" + mWhite };
+		std::vector<std::string> resultMessage { blackSt.append(mBlack), whiteSt.append(mWhite)};
 		for (int i = 0; i < 2; i++) {
-			resultT = mFont->RenderText(resultMessage[i]);
-			DrawTexture(renderer, resultT, Vector2{ 50, static_cast<float>(50+72*i)}, 2.0f);
+			resultT = mFont->RenderText(resultMessage[i], Color::White, 72);
+			DrawTexture(renderer, resultT, Vector2{ 700, static_cast<float>(50+150*i)}, 2.0f);
 		}
 	}
 }
 
 void HUD::SetResultText(const int black, const int white)
 {
-	mBlack = black;
-	mWhite = white;
+	std::string blackSt = std::to_string(black);
+	std::string whiteSt = std::to_string(white);
+	mBlack = u8"" + blackSt;
+	mWhite = u8"" + whiteSt;
 }
 
 void HUD::SetStatusText(const std::string& text, const Vector3& color)
